@@ -1,0 +1,29 @@
+/*                
+                //Update price for each row 
+                //"UPDATE PRODUCTS SET PRICEBUY = ?, PRICESELL = ? WHERE ID=?"
+                con.prepareStatement("UPDATE PRODUCTS SET PRICEBUY = ?, PRICESELL = ? "
+                        + "WHERE ID=? ");
+                try (Statement stUpdate = con.createStatement()) {
+
+//                    con.setAutoCommit(false);
+//                    stUpdate.setFloat(1, 0.0);
+//                    stUpdate.executeUpdate();
+//                    
+//                    con.commit();
+
+                } catch (SQLException ex) {
+
+                    if (con != null) {
+                        try {
+                            con.rollback();
+                        } catch (SQLException ex1) {
+                            Logger lgr = Logger.getLogger(UpdateToPOSProductPrice.class.getName());
+                            lgr.log(Level.WARNING, ex1.getMessage(), ex1);
+                        }
+                    }
+
+                    Logger lgr = Logger.getLogger(UpdateToPOSProductPrice.class.getName());
+                    lgr.log(Level.SEVERE, ex.getMessage(), ex);
+                    
+                }
+*/
