@@ -65,3 +65,14 @@ recordid numeric not null,
 isprocessed varchar(1), 
 primary key ( recordid )
 ); 
+
+UPDATE products
+SET `code` = replace(code, '.0', '');
+
+UPDATE products
+SET `id` = replace(code, '.0', '');
+
+-- automatic create SHOW item in Catalog
+insert into products_cat (product)
+ (select id from products) ;
+
