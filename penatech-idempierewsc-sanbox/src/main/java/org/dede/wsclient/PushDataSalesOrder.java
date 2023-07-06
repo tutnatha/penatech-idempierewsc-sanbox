@@ -154,4 +154,25 @@ public class PushDataSalesOrder extends AbstractTestWS{
 		new PushDataSalesOrder();
 	}
 
+	public void insertRecordID(ArrayList<Integer> aRecordID,
+							   Connection conn){
+
+		String sqlInsert = "insert into temp_recordid (recordid, isprocessed) values (?,?);";
+		PreparedStatement psInsert = null;
+		try {
+			psInsert = conn.prepareStatement(sqlInsert);
+
+			//Start Loop
+			int n = aRecordID.size();
+//			for (int i = 1; i <= n; i++) {
+			for (int i = 0; i < n; i++) {
+				psInsert.setInt(1, aRecordID.get(i));    //aRecordID
+				psInsert.setString(2, "N");            //Processed
+				psInsert.executeUpdate();
+			}
+			//end loop
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}	
 }
