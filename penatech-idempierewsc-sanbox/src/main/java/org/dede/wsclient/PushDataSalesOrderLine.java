@@ -79,7 +79,19 @@ public class PushDataSalesOrderLine extends AbstractTestWS{
 	    	PreparedStatement pstmt = con.prepareStatement(SQL);
 	    	
 	    	ResultSet rs = pstmt.executeQuery();
-	    	
+
+		//WHILE NYA RECORD_id
+		ArrayList<Integer> recIDList = recordIDList(con);
+
+		if (recIDList.size() > 0) {
+			System.out.println("@recIDList : " + recIDList.size());
+//			}	//remark
+
+		for (int z = 0; z < recIDList.size(); z++) {
+			Integer cOrderID = recIDList.get(z);
+			System.out.println("@cOrderID : " + cOrderID);
+//			} //remark
+				
 	    	while(rs.next()) {
 	    		System.out.println("Row : "+ rs.getString(1) + " " + 
 	    				rs.getInt(2) + " " +
@@ -141,6 +153,9 @@ public class PushDataSalesOrderLine extends AbstractTestWS{
 	    				System.out.println("RecordID: " + response.getRecordID());
 	    				System.out.println();
 
+					//UPDATE status :
+					updateRecID2Y(cOrderID, con);
+					
 	    				for (int i = 0; i < response.getOutputFields().getFieldsCount(); i++) {
 	    					System.out.println("Column" + (i + 1) + ": " + response.getOutputFields().getField(i).getColumn() + " = " + response.getOutputFields().getField(i).getValue());
 	    				}
@@ -151,8 +166,9 @@ public class PushDataSalesOrderLine extends AbstractTestWS{
 	    			e.printStackTrace();
 	    		}
 
-	    	}
-	    	
+	    	} //end while
+	    } //end loop
+	} //end if
 	    } catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -181,4 +197,45 @@ public class PushDataSalesOrderLine extends AbstractTestWS{
 
 	}
 
+	public ArrayList<Integer> recordIDList(Connection x){
+		ArrayList<Integer> recordIDList = new ArrayList();
+
+		//select from db
+		String select_SQL = "SELECT recordid, isprocessed " +
+				" FROM temp_recordid "+
+				" WHERE isprocessed = 'N'";
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = x.prepareStatement(select_SQL);
+			ResultSet rs = pstmt.executeQuery();
+
+			while(rs.next()){
+				recordIDList.add(rs.getInt("recordid"));
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return recordIDList;
+	}
+
+	
+	public void updateRecID2Y(Integer recID , Connection x){
+		//sql update
+		String sqlUpdate = " UPDATE temp_recordid "+
+				" SET isprocessed = 'Y' " +
+				" WHERE recordid = ?";
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = x.prepareStatement
+					(sqlUpdate);
+			pstmt.setInt(1, recID);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
