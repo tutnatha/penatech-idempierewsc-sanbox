@@ -58,3 +58,10 @@ primary key (c_bpartner_id)
 -- Query ticket dan ticket line
 select t.*, tl.* from tickets t, ticketlines tl
 where t.id=tl.ticket;
+
+-- table for record ID:
+create table temp_recordid (
+recordid numeric not null, 
+isprocessed varchar(1), 
+primary key ( recordid )
+); 
