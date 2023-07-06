@@ -1,7 +1,8 @@
 package org.dede.wsclient;
 
 import java.sql.Connection;
-import java.sql.Date;
+//import java.sql.Date;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -85,11 +86,17 @@ public class PushDataSalesOrder extends AbstractTestWS{
 	    		data.addField("C_BPartner_ID", 112);
 	    		
 //	    		LocalDate created = LocalDate.now();
-	    		Date date = new Date(0);
+	    		// Date date = new Date(0);
+			Date date = new Date();
+			System.out.println("@date : "+ date);
+			
 	    		Timestamp timestamp = new Timestamp(date.getDate());
-	    		data.addField("DateAcct", timestamp);
-	    		
-	    		data.addField("DateOrdered", timestamp);
+	    		// data.addField("DateAcct", timestamp);
+	    		data.addField("DateAcct", date);
+			
+	    		// data.addField("DateOrdered", timestamp);
+			data.addField("DateOrdered",date);
+			
 	    		data.addField("C_DocType_ID", 135);
 	    		data.addField("C_DocTypeTarget_ID", 135);
 	    		data.addField("UpdatedBy", 100);
@@ -97,7 +104,12 @@ public class PushDataSalesOrder extends AbstractTestWS{
 	    		data.addField("AD_Client_ID", 11);
 	    		data.addField("AD_Org_ID", 11);
 	    		
-	    		
+	    		data.addField("Description", "#id : " + rs.getString(1) + "#tickettype : " +
+						rs.getString(2) + "#ticketid : " +
+						rs.getString(3) + "#person : " +
+						rs.getString(4) + "#status : "  +
+						rs.getString(5));
+			
 	    		createData.setDataRow(data);
 
 	    		//insert detail 
@@ -144,7 +156,11 @@ public class PushDataSalesOrder extends AbstractTestWS{
 	    
 		//Loop Result Set
 		//Then Push Row to Server
-		
+		//Insert RecordID -> Sales Order:temp_RecordID
+		if (aRecordID.size() > 0){
+			//do insert..
+			insertRecordID(aRecordID, conn);
+		}
 		
 		//The End
 		
